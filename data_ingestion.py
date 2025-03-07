@@ -25,3 +25,6 @@ def loading_df():
     else:
         print("No CSV file found in the dataset directory.")
         
+    return df 
+
+        
