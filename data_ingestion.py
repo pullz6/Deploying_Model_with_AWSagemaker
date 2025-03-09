@@ -16,7 +16,7 @@ def loading_df():
     files = os.listdir(path)
     print("Files in dataset:", files)
 
-    # Assuming the dataset contains a CSV file, find the first CSV file
+    # Finding the first CSV file
     csv_files = [file for file in files if file.endswith(".csv")]
 
     if csv_files:
@@ -25,7 +25,8 @@ def loading_df():
         df = pd.read_csv(file_path)
     else:
         print("No CSV file found in the dataset directory.")
-        
+    
+    #Returning the dataframe
     return df 
 
         

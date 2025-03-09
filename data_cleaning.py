@@ -1,4 +1,7 @@
+#Importing our classes and their functions
 from data_ingestion import * 
+
+#Importing libraries
 import pandas as pd 
 
 def cleaning_df(): 
