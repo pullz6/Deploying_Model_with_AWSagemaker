@@ -1,6 +1,7 @@
 #Importing our classes and their functions
 from data_cleaning import * 
 from model import * 
+import mlflow
 
 #Importing libraries
 import numpy as np
