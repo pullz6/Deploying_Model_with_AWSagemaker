@@ -1,11 +1,17 @@
 #Importing Libraries
 import numpy as np
-from sklearn.model_selection import train_test_split
 import pandas as pd 
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, mean_absolute_error 
+
+#Utility for sklearn 
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 
+#Importing the models from Sklearn
+import xgboost as xgb
+from sklearn.linear_model import LinearRegression
+
 def model(): 
-    model = LinearRegression()
+    lr_model = LinearRegression()
+    xgb_model = xgb.XGBRegressor(objective="reg:linear", random_state=42)
+    model = make_pipeline(lr_model, xgb_model)
     return model
