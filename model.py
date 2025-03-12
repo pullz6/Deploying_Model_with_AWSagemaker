@@ -8,32 +8,28 @@ from sklearn.model_selection import train_test_split
 from sklearn.model_selection import RepeatedKFold, cross_val_score
 
 #Importing the models from Sklearn
-import xgboost as xgb
+import xgboost as xg
 from sklearn.linear_model import LinearRegression
 from sklearn.naive_bayes import GaussianNB
+from sklearn.ensemble import StackingRegressor
 
 
 # get a stacking ensemble of models
 def get_stacking():
-	# define the base models
-	level0 = list()
-	level0.append(('lr', LinearRegression()))
-	level0.append(('bayes', GaussianNB()))
+    level0 = list()
+    level0.append(('lr', LinearRegression()))
     level0.append(('xgb',xg.XGBRegressor(objective='reg:squarederror', n_estimators=10, seed=123)))
-	# define meta learner model
-	level1 = LinearRegression()
-	# define the stacking ensemble
-	model = StackingClassifier(estimators=level0, final_estimator=level1, cv=5)
-	return model
+    level1 = LinearRegression()
+    model = StackingRegressor(estimators=level0, final_estimator=level1, cv=5)
+    return model
  
 # get a list of models to evaluate
 def get_models():
-	models = dict()
-	models['lr'] = LinearRegression()
-	models['bayes'] = GaussianNB()
-	models['stacking'] = get_stacking()
+    models = dict()
+    models['lr'] = LinearRegression()
+    models['stacking'] = get_stacking()
     models['xgb'] = xg.XGBRegressor(objective='reg:squarederror', n_estimators=10, seed=123)
-	return models
+    return models
  
 def evaluate_model(model, X, y):
     # Define cross-validation method (Repeated K-Fold for regression)
