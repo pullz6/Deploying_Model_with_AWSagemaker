@@ -13,10 +13,11 @@ dataset_source_url = "https://www.kaggle.com/datasets/yasserh/kinematics-motion-
 raw_data = loading_df()
 
 dataset = mlflow.data.from_pandas(
-    raw_data, source=dataset_source_url, name="Kinematics to see phone activity", targets="activity"
+    raw_data, source=dataset_source_url, name="Kinematics - dataset", targets="activity"
 )
 
-with mlflow.start_run():
+experiment = mlflow.get_experiment_by_name("Kinematics to see phone activity")
+with mlflow.start_run(experiment_id=experiment.experiment_id):
     # Log the dataset to the MLflow Run. Specify the "training" context to indicate that the
     # dataset is used for model training
     mlflow.log_input(dataset, context="training")
