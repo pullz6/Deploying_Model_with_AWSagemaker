@@ -1,5 +1,4 @@
-#Importing our classes and their functions
-from run_training import * 
+#Importing our classes and their functions 
 from data_cleaning import * 
 
 #Utility for sklearn 
