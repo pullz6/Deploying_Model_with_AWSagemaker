@@ -10,6 +10,9 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 
+
+
+
 df = cleaning_df()
 X = df.drop(['wrist','time','date','gyro_x','gyro_y','gyro_z'],axis=1)
 y = df['activity']
