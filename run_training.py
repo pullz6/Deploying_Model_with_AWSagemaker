@@ -1,12 +1,14 @@
 #Importing our classes and their functions
 from data_cleaning import * 
-from model import * 
-import mlflow
-from mlflow.models import infer_signature
+from model_stack import * 
+from model_tuning import * 
+
 
 #Importing libraries
 import numpy as np
 import pandas as pd
+import mlflow
+from mlflow.models import infer_signature
 
 #Importing sklearn utilities 
 from sklearn.model_selection import train_test_split
@@ -25,38 +27,35 @@ print('starting the run')
     #mlflow.set_tracking_uri(uri="http://127.0.0.1:8080")
     # Create a new MLflow Experiment
 mlflow.set_experiment("Kinematics to see phone activity")
-
-with mlflow.start_run():
+  
+# get the models to evaluate
+models = get_models()
     
+# evaluate the models and store results
+results, names = list(), list()
+    
+for name, model in models.items():
     # Set a tag that we can use to remind ourselves what this run was for
     mlflow.set_tag("Training Info", "Training a linear regression model to predict kinematic movement through phones")
-    
-    # get the models to evaluate
-    models = get_models()
-    
-    # evaluate the models and store results
-    results, names = list(), list()
-    
-    for name, model in models.items():
+    with mlflow.start_run(nested=True):
         scores = evaluate_model(model, X_train, y_train)
         model.fit(X_train,y_train)
         signature = infer_signature(X_train, model.predict(X_train))
-        
+            
         # Log the model
         model_info = mlflow.sklearn.log_model(
             sk_model=model,
-            artifact_path="Kinematic model",
+            artifact_path="Kinematic model "+str(name),
             signature=signature,
             input_example=X_train,
             registered_model_name=name,
         )
-        
+            
         print('>%s %.3f (%.3f)' % (name, mean(scores), std(scores)))
-        results.append(scores)
-        names.append(name)
+        mlflow.log_metric(str(name)+" Mean", mean(scores))
+        mlflow.log_metric(str(name)+" STD", std(scores))
 
-        mlflow.log_metric("Mean", mean(scores))
-        mlflow.log_metric("STD", std(scores))
+        
         
 
         
