@@ -38,6 +38,8 @@ for name, model in models.items():
     # Set a tag that we can use to remind ourselves what this run was for
     mlflow.set_tag("Training Info", "Training a linear regression model to predict kinematic movement through phones")
     with mlflow.start_run(nested=True):
+        if name=='xgb':
+            random_search_best_params = tuning(X_train,y_train)
         scores = evaluate_model(model, X_train, y_train)
         model.fit(X_train,y_train)
         signature = infer_signature(X_train, model.predict(X_train))
