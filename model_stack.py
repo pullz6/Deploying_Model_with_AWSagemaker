@@ -15,20 +15,20 @@ from sklearn.ensemble import StackingRegressor
 
 
 # get a stacking ensemble of models
-def get_stacking():
+def get_stacking(random_search_best_params):
     level0 = list()
     level0.append(('lr', LinearRegression()))
-    level0.append(('xgb',xg.XGBRegressor(objective='reg:squarederror', n_estimators=10, seed=123)))
+    level0.append(('xgb',xg.XGBRegressor(objective='reg:squarederror', **random_search_best_params)))
     level1 = LinearRegression()
     model = StackingRegressor(estimators=level0, final_estimator=level1, cv=5)
     return model
  
 # get a list of models to evaluate
-def get_models():
+def get_models(random_search_best_params):
     models = dict()
     models['lr'] = LinearRegression()
-    models['xgb'] = xg.XGBRegressor(objective='reg:squarederror', n_estimators=10, seed=123)
-    models['stacking'] = get_stacking()
+    models['xgb'] = xg.XGBRegressor(objective='reg:squarederror', **random_search_best_params)
+    models['stacking'] = get_stacking(random_search_best_params)
     return models
  
 def evaluate_model(model, X, y):
