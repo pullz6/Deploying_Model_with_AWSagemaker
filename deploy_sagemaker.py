@@ -8,13 +8,8 @@ from mlflow.deployments import get_deploy_client
 import logging
 from mlflow.tracking import MlflowClient
 
-print("Tracking URI:", mlflow.get_tracking_uri()) 
-
 client = MlflowClient()
 models = client.search_registered_models()
-
-for model in models:
-    print(f"Model Name: {model.name}")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -30,11 +25,11 @@ except Exception as e:
     raise
 
 # Specify IAM Role for SageMaker
-role = "<ADD YOUR ARN>"  # Replace with your actual SageMaker execution role ARN
+role = "arn:aws:iam::905418206632:role/Deployer"  # Replace with your actual SageMaker execution role ARN
 logger.info(f"Using IAM Role: {role}")
 
 # MLflow Tracking URI
-tracking_uri = "file:USER/Desktop/Projects/MLOps/Deploy_Model/mlruns"  # Ensure this is reachable
+tracking_uri = "file:///Users/pulsaragunawardhana/Desktop/Projects/MLOps/Deploy_Model/mlruns"  # Ensure this is reachable
 mlflow.set_tracking_uri(tracking_uri)
 
 # Model details
@@ -42,7 +37,7 @@ endpoint_name = "Kinematic-prediction"
 model_name = "xgb" 
 model_version = 13
 model_uri = f"models:/{model_name}/{model_version}"
-image_uri = "<ADD YOUR ARN>"
+image_uri = "905418206632.dkr.ecr.eu-west-2.amazonaws.com/deploy/mflow_1"
 
 # ✅ Check if model exists in MLflow
 try:
@@ -80,8 +75,8 @@ try:
     response = deploy_client.create_deployment(
         name=endpoint_name,
         model_uri=model_uri,
-        flavor="python_function",
-        config=config
+        flavor="python_function"
+        #config=config
     )
     logger.info(f"Model deployed successfully! Endpoint Name: {endpoint_name}")
 except Exception as e:
