@@ -30,11 +30,11 @@ except Exception as e:
     raise
 
 # Specify IAM Role for SageMaker
-role = "arn:aws:iam::905418206632:role/Deployer"  # Replace with your actual SageMaker execution role ARN
+role = "<ADD YOUR ARN>"  # Replace with your actual SageMaker execution role ARN
 logger.info(f"Using IAM Role: {role}")
 
 # MLflow Tracking URI
-tracking_uri = "file:///Users/pulsaragunawardhana/Desktop/Projects/MLOps/Deploy_Model/mlruns"  # Ensure this is reachable
+tracking_uri = "file:USER/Desktop/Projects/MLOps/Deploy_Model/mlruns"  # Ensure this is reachable
 mlflow.set_tracking_uri(tracking_uri)
 
 # Model details
@@ -42,7 +42,7 @@ endpoint_name = "Kinematic-prediction"
 model_name = "xgb" 
 model_version = 13
 model_uri = f"models:/{model_name}/{model_version}"
-image_uri = "905418206632.dkr.ecr.eu-west-2.amazonaws.com/deploy/mflow_1"
+image_uri = "<ADD YOUR ARN>"
 
 # ✅ Check if model exists in MLflow
 try:
