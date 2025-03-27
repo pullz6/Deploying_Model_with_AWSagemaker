@@ -139,7 +139,3 @@ Specify the license type (e.g., MIT, Apache, etc.) and include a link to the ful
 ## Acknowledgments
 
 Shout out to resources, libraries, people, or tutorials that helped you build the project.
-
----
-
-This template makes your project easy to understand, onboard, and use, making it more likely to engage users and contributors.
