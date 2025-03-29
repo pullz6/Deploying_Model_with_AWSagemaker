@@ -22,7 +22,7 @@ This project is to understand and provide a template on how to take a model in M
 
 ### About
 
-Provide more detail about the project here:
+This project is an end to end model training to deployment pipeline. Provide more detail about the project here:
 
 - Describe the main goals and scope.
 - Explain the problem it addresses and why it’s useful.
