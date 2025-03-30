@@ -89,20 +89,6 @@ Explain any environment variables or configuration steps:
 
 ## Examples
 
-Include code examples, usage cases, or sample input/output:
-
-```python
-python
-Copy code
-# Example of usage
-from yourmodule import yourfunction
-
-result = yourfunction(input_data)
-print(result)
-
-```
-
-For interactive projects, a video or GIF demo is also highly effective here.
 
 ---
 
