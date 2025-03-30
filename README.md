@@ -45,8 +45,13 @@ If available, add images or animated GIFs that showcase the application. This ad
 
 ### Prerequisites
 
-1. List any software, packages, or version requirements (e.g., Python 3.7+, Node.js).
-2. Links to installation guides if users are likely unfamiliar.
+1. Python
+2. Pandas
+3. SKlearn
+4. XGBoost
+5. AWS - Sagemaker
+6. AWS - ECR
+7. AWS - S3
 
 ### Setup
 
