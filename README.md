@@ -95,11 +95,9 @@ Explain any environment variables or configuration steps:
 ## Project Structure
 
 ```bash
-bash
-Copy code
 project-root/
 │
-├── src/                 # Source files
+├── check_kaggle.py/     # Accesing the dataset from Kaggle
 ├── data/                # Sample datasets
 ├── notebooks/           # Jupyter notebooks
 ├── tests/               # Unit and integration tests
