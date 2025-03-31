@@ -99,7 +99,7 @@ project-root/
 │
 ├── check_kaggle.py/     # Accesing the dataset from Kaggle
 ├── data_ingestion.py/   # Faciliating the data ingestion from the check_kaggle.py
-├── notebooks/           # Jupyter notebooks
+├── data_cleaning.py/    # Cleaning the data after the data ingestion. 
 ├── tests/               # Unit and integration tests
 ├── README.md            # Project documentation
 └── requirements.txt     # Project dependencies
