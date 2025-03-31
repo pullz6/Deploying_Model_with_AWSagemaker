@@ -98,7 +98,7 @@ Explain any environment variables or configuration steps:
 project-root/
 │
 ├── check_kaggle.py/     # Accesing the dataset from Kaggle
-├── data/                # Sample datasets
+├── data_ingestion.py/   # Faciliating the data ingestion from the check_kaggle.py
 ├── notebooks/           # Jupyter notebooks
 ├── tests/               # Unit and integration tests
 ├── README.md            # Project documentation
