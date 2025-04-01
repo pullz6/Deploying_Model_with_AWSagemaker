@@ -83,7 +83,8 @@ Step 3 - Run run_training.py file with python run_training.py
 Step 4 - To view the MlFlow dashboard on port 500 - mlflow ui --port 5000
 Step 5 - Upload model artifact to S3 
 Step 6 - Create Docker file 
-Step 7 - Uploade to ECR
+Step 7 - Upload to ECR
+Step 8 - Create sagemaker endpoint
 
 ### Configuration
 
