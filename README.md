@@ -77,7 +77,10 @@ pip install -r requirements.txt
 
 ### Running the Application
 
-Provide steps or commands to launch the project.
+Step 1 - Create ENV
+Step 2 - Download all neccessary libaries
+Step 3 - Run run_training.py file with python run_training.py 
+Step 4 - To view the MlFlow dashboard on port 500 - mlflow ui --port 5000
 
 ### Configuration
 
