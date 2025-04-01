@@ -106,7 +106,8 @@ project-root/
 │
 ├── check_kaggle.py/     # Accesing the dataset from Kaggle
 ├── data_ingestion.py/   # Faciliating the data ingestion from the check_kaggle.py
-├── data_cleaning.py/    # Cleaning the data after the data ingestion. 
+├── data_cleaning.py/    # Cleaning the data after the data ingestion.
+├── log_df.py/           # Log the cleaned dataframe into MLFlow. 
 ├── tests/               # Unit and integration tests
 ├── README.md            # Project documentation
 └── requirements.txt     # Project dependencies
