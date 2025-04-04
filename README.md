@@ -49,9 +49,10 @@ If available, add images or animated GIFs that showcase the application. This ad
 2. Pandas
 3. SKlearn
 4. XGBoost
-5. AWS - Sagemaker
-6. AWS - ECR
-7. AWS - S3
+5. Docker
+6. AWS - Sagemaker
+7. AWS - ECR
+8. AWS - S3
 
 ### Setup
 
