@@ -56,19 +56,8 @@ If available, add images or animated GIFs that showcase the application. This ad
 
 ### Setup
 
-Detailed steps to install and run the project:
+This project can be cloned, but it is highly recommend to use it as a guideline. 
 
-```bash
-bash
-Copy code
-# Clone the repository
-git clone https://github.com/yourusername/yourprojectname.git
-
-# Navigate into the directory
-cd yourprojectname
-
-# Install dependencies
-pip install -r requirements.txt
 
 ```
 
