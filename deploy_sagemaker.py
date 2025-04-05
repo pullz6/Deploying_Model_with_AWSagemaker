@@ -10,10 +10,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 CONFIG = {
-    "DEPLOYMENT_NAME": "my-mlflow-model",
-    "MODEL_URI": "s3://mlflow-sagemaker-eu-west-2-905418206632/Kinematic-prediction-model-5b36c82f44864e06a710/",
-    "IMAGE_URI": "905418206632.dkr.ecr.eu-west-2.amazonaws.com/deploy/mflow_1:latest",
-    "REGION": "eu-west-2",
+    "DEPLOYMENT_NAME": <ENTER>,
+    "MODEL_URI":  <ENTER>,
+    "IMAGE_URI":  <ENTER>,
+    "REGION":  <ENTER>,
     "INSTANCE_TYPE": "ml.t2.medium",
     "TIMEOUT": 3600,  # 1 hour timeout
     "DEPLOY_MODE": "replace"  # Critical for updates
