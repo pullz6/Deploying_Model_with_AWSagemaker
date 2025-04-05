@@ -23,10 +23,9 @@ This project is to understand and provide a template on how to take a model in M
 
 This project is an end to end model training to deployment pipeline, below objectives are achieved: 
 
-- Creating 
-- We will also develop a model with Stacking ensemble method. 
-- Explain the problem it addresses and why it’s useful.
-- Mention any key tools, libraries, or frameworks used.
+- Creating Linear Regression, XGBoost and a stacked model with a Linear regressor and the XGBoost models.
+- Testing and evalution of these models.
+- Deploying the model with Amazon Sagemaker. 
 
 
 ## Installation
