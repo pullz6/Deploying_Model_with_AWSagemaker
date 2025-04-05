@@ -46,14 +46,14 @@ This project can be cloned, but it is highly recommend to use it as a guideline.
 
 ### Running the Application
 
-Step 1 - Create ENV
-Step 2 - Download all neccessary libaries
-Step 3 - Run run_training.py file with python run_training.py 
-Step 4 - To view the MlFlow dashboard on port 500 - mlflow ui --port 5000
-Step 5 - Upload model artifact to S3 
-Step 6 - Create Docker file 
-Step 7 - Upload to ECR
-Step 8 - Create sagemaker endpoint
+1. Step 1 - Create ENV
+2. Step 2 - Download all neccessary libaries
+3. Step 3 - Run run_training.py file with python run_training.py 
+4. Step 4 - To view the MlFlow dashboard on port 500 - mlflow ui --port 5000
+5. Step 5 - Upload model artifact to S3
+6. Step 6 - Create Docker file
+7. Step 7 - Upload to ECR
+8. Step 8 - Create sagemaker endpoint
 
 ### Configuration
 
@@ -68,10 +68,15 @@ project-root/
 ├── check_kaggle.py/     # Accesing the dataset from Kaggle
 ├── data_ingestion.py/   # Faciliating the data ingestion from the check_kaggle.py
 ├── data_cleaning.py/    # Cleaning the data after the data ingestion.
-├── log_df.py/           # Log the cleaned dataframe into MLFlow. 
-├── tests/               # Unit and integration tests
-├── README.md            # Project documentation
-└── requirements.txt     # Project dependencies
+├── log_df.py/           # Log the cleaned dataframe into MLFlow.
+├── model_tuning.py/     # Parameter search for XGBoost model's parameter.
+├── model_stacking.py/   # The training of all the models as well as model evaluation.
+├── run_training.py/     # Running the training pipeline.
+├── run_inference.py/    # Running the inference pipeline.
+├── deploy_sagemaker_initialrun.py/ # Running deployment at the first time.
+├── deploy_sagemaker.py/ # Running the deployment after first time, this replaces the model in the endpoint.
+├── dockerfile/          # The docker file of the model selected
+└── README.md            # Details about the project
 
 ```
 
