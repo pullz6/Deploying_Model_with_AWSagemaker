@@ -45,11 +45,6 @@ This project is an end to end model training to deployment pipeline, below objec
 
 This project can be cloned, but it is highly recommend to use it as a guideline. The sets are listed under "Running the Application"
 
-
-```
-
----
-
 ## Usage
 
 ### Running the Application
@@ -68,9 +63,6 @@ Step 8 - Create sagemaker endpoint
 Please ensure to set up your AWS credentials with AWS configure. 
 
 
----
-
-
 ## Project Structure
 
 ```bash
@@ -86,9 +78,6 @@ project-root/
 
 ```
 
-
----
-
 ## Contributing
 
 Guidelines for contributing to the project:
@@ -96,10 +85,6 @@ Guidelines for contributing to the project:
 - How to submit issues, bug reports, or feature requests.
 - Guidelines for pull requests, including coding standards and testing.
 
----
-
-
----
 
 ## Acknowledgments
 
