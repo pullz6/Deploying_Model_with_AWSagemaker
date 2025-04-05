@@ -43,7 +43,7 @@ This project is an end to end model training to deployment pipeline, below objec
 
 ### Setup
 
-This project can be cloned, but it is highly recommend to use it as a guideline. 
+This project can be cloned, but it is highly recommend to use it as a guideline. The sets are listed under "Running the Application"
 
 
 ```
@@ -65,9 +65,8 @@ Step 8 - Create sagemaker endpoint
 
 ### Configuration
 
-Explain any environment variables or configuration steps:
+Please ensure to set up your AWS credentials with AWS configure. 
 
-- For example, set up `.env` files, database settings, or API keys.
 
 ---
 
