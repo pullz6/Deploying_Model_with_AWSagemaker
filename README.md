@@ -7,8 +7,7 @@ This project is to understand and provide a template on how to take a model in M
 ## Table of Contents
 
 1. [Project Overview]
-2. [Features]
-3. [Installation]
+2. [Installation]
 4. [Usage]
 5. [Examples]
 6. [Project Structure]
@@ -22,25 +21,13 @@ This project is to understand and provide a template on how to take a model in M
 
 ### About
 
-This project is an end to end model training to deployment pipeline. 
+This project is an end to end model training to deployment pipeline, below objectives are achieved: 
 
-- We will develop several versions of a model
+- Creating 
 - We will also develop a model with Stacking ensemble method. 
 - Explain the problem it addresses and why it’s useful.
 - Mention any key tools, libraries, or frameworks used.
 
-### Screenshots or Demos
-
-If available, add images or animated GIFs that showcase the application. This adds visual appeal and context.
-
----
-
-## Features
-
-- List out the key features of your project.
-- Focus on unique functionalities, user experience highlights, or specific innovations.
-
----
 
 ## Installation
 
@@ -85,10 +72,6 @@ Explain any environment variables or configuration steps:
 
 ---
 
-## Examples
-
-
----
 
 ## Project Structure
 
@@ -105,7 +88,6 @@ project-root/
 
 ```
 
-Provide brief explanations for each major directory/file if the structure is complex.
 
 ---
 
@@ -118,9 +100,6 @@ Guidelines for contributing to the project:
 
 ---
 
-## License
-
-Specify the license type (e.g., MIT, Apache, etc.) and include a link to the full license file.
 
 ---
 
