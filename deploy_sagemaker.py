@@ -1,84 +1,106 @@
-import json
+import mlflow.sagemaker as mfs
 import boto3
-import mlflow
-import sagemaker
-import pandas as pd
-import mlflow.sagemaker
-from mlflow.deployments import get_deploy_client
+from datetime import datetime, timedelta
+import time
 import logging
-from mlflow.tracking import MlflowClient
-
-client = MlflowClient()
-models = client.search_registered_models()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Set AWS region
-try:
-    session = boto3.Session()
-    region = session.region_name or "eu-north-1"  # Default to eu-north-1 if region is not set
-    logger.info(f"Using AWS region: {region}")
-except Exception as e:
-    logger.error(f"Error retrieving AWS region: {e}")
-    raise
-
-# Specify IAM Role for SageMaker
-role = "arn:aws:iam::905418206632:role/Deployer"  # Replace with your actual SageMaker execution role ARN
-logger.info(f"Using IAM Role: {role}")
-
-# MLflow Tracking URI
-tracking_uri = "file:///Users/pulsaragunawardhana/Desktop/Projects/MLOps/Deploy_Model/mlruns"  # Ensure this is reachable
-mlflow.set_tracking_uri(tracking_uri)
-
-# Model details
-endpoint_name = "Kinematic-prediction"
-model_name = "xgb" 
-model_version = 13
-model_uri = f"models:/{model_name}/{model_version}"
-image_uri = "905418206632.dkr.ecr.eu-west-2.amazonaws.com/deploy/mflow_1"
-
-# ✅ Check if model exists in MLflow
-try:
-    client = MlflowClient()
-    model_versions = client.get_latest_versions(model_name)
-    print("Starting-------")
-    print(model_versions)
-    if any(m.version == model_version for m in model_versions):
-        logger.info(f"Model {model_uri} exists. Proceeding with deployment.")
-    else:
-        raise ValueError(f"Model {model_uri} not found in MLflow Model Registry.")
-except Exception as e:
-    logger.error(f"Error retrieving model {model_uri}: {e}")
-    raise
-
-# Deployment configuration
-config = {
-    "execution_role_arn": role,
-    "image_url": image_uri,
-    "instance_type": "ml.m5.xlarge",
-    "instance_count": 1,
-    "region_name": region
+# Configuration
+CONFIG = {
+    "DEPLOYMENT_NAME": "my-mlflow-model",
+    "MODEL_URI": "s3://mlflow-sagemaker-eu-west-2-905418206632/Kinematic-prediction-model-5b36c82f44864e06a710/",
+    "IMAGE_URI": "905418206632.dkr.ecr.eu-west-2.amazonaws.com/deploy/mflow_1:latest",
+    "REGION": "eu-west-2",
+    "INSTANCE_TYPE": "ml.t2.medium",
+    "DEPLOY_TIMEOUT": 1800,  # 30 minutes
+    "TEST_DURATION": 600,    # 10 minutes (set to 0 for immediate cleanup)
+    "ENABLE_CLEANUP": True   # Set False to skip cleanup
 }
 
-# Initialize SageMaker deployment client
-try:
-    deploy_client = get_deploy_client("sagemaker")
-    logger.info("Successfully connected to SageMaker deployment client.")
-except Exception as e:
-    logger.error(f"Error initializing SageMaker deployment client: {e}")
-    raise
+class SageMakerDeployer:
+    def __init__(self, config):
+        self.config = config
+        self.sm_client = boto3.client('sagemaker', region_name=config["REGION"])
 
-# Deploy the model
-try:
-    response = deploy_client.create_deployment(
-        name=endpoint_name,
-        model_uri=model_uri,
-        flavor="python_function"
-        #config=config
-    )
-    logger.info(f"Model deployed successfully! Endpoint Name: {endpoint_name}")
-except Exception as e:
-    logger.error(f"Error deploying model to SageMaker: {e}")
-    raise
+    def deploy_model(self):
+        """Deploy model to SageMaker endpoint"""
+        try:
+            logger.info(f"🚀 Deploying model to SageMaker (timeout: {self.config['DEPLOY_TIMEOUT']}s)")
+            
+            mfs.deploy(
+                app_name=self.config["DEPLOYMENT_NAME"],
+                model_uri=self.config["MODEL_URI"],
+                image_url=self.config["IMAGE_URI"],
+                region_name=self.config["REGION"],
+                instance_type=self.config["INSTANCE_TYPE"],
+                timeout_seconds=self.config["DEPLOY_TIMEOUT"],
+                mode=mfs.DEPLOYMENT_MODE_REPLACE,
+                synchronous=True
+            )
+            logger.info("✅ Deployment successful!")
+            return True
+        except Exception as e:
+            logger.error(f"❌ Deployment failed: {str(e)}")
+            return False
+
+    def test_endpoint(self):
+        """Placeholder for your test logic"""
+        if self.config["TEST_DURATION"] <= 0:
+            return
+        
+        logger.info(f"⏳ Running tests for {self.config['TEST_DURATION']} seconds...")
+        
+        # Example: Ping the endpoint (replace with your actual test logic)
+        try:
+            runtime = boto3.client('sagemaker-runtime', region_name=self.config["REGION"])
+            start_time = time.time()
+            
+            while time.time() - start_time < self.config["TEST_DURATION"]:
+                # Replace with your actual inference test
+                time.sleep(60)  # Check every minute
+                logger.info("🧪 Testing endpoint... (replace with your test logic)")
+                
+        except Exception as e:
+            logger.error(f"⚠️ Test error: {str(e)}")
+
+    def cleanup(self):
+        """Delete SageMaker resources to stop charges"""
+        if not self.config["ENABLE_CLEANUP"]:
+            return
+            
+        logger.info("🧹 Cleaning up AWS resources...")
+        
+        endpoint_name = self.config["DEPLOYMENT_NAME"]
+        try:
+            # Delete endpoint
+            self.sm_client.delete_endpoint(EndpointName=endpoint_name)
+            logger.info(f"🗑️ Deleted endpoint: {endpoint_name}")
+            
+            # Delete endpoint config
+            endpoint_config_name = self.sm_client.describe_endpoint(
+                EndpointName=endpoint_name)["EndpointConfigName"]
+            self.sm_client.delete_endpoint_config(
+                EndpointConfigName=endpoint_config_name)
+            logger.info(f"🗑️ Deleted endpoint config: {endpoint_config_name}")
+            
+            # Delete model
+            model_name = endpoint_config_name  # SageMaker creates model with same name as config
+            self.sm_client.delete_model(ModelName=model_name)
+            logger.info(f"🗑️ Deleted model: {model_name}")
+            
+        except Exception as e:
+            logger.error(f"⚠️ Cleanup error: {str(e)}")
+
+    def run(self):
+        """Execute full workflow"""
+        if self.deploy_model():
+            self.test_endpoint()
+            if self.config["ENABLE_CLEANUP"]:
+                self.cleanup()
+
+if __name__ == "__main__":
+    deployer = SageMakerDeployer(CONFIG)
+    deployer.run()
