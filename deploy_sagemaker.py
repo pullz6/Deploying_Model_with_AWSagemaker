@@ -3,6 +3,7 @@ from mlflow.deployments import get_deploy_client
 import boto3
 import logging
 import time
+from botocore.exceptions import ClientError
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -14,10 +15,8 @@ CONFIG = {
     "IMAGE_URI": "905418206632.dkr.ecr.eu-west-2.amazonaws.com/deploy/mflow_1:latest",
     "REGION": "eu-west-2",
     "INSTANCE_TYPE": "ml.t2.medium",
-    "TIMEOUT": 1800,
-    "TEST_DURATION": 300,
-    "ENABLE_CLEANUP": True,
-    "DEPLOY_MODE": "replace"
+    "TIMEOUT": 3600,  # 1 hour timeout
+    "DEPLOY_MODE": "replace"  # Critical for updates
 }
 
 class SageMakerDeployer:
@@ -31,72 +30,67 @@ class SageMakerDeployer:
         try:
             self.sm_client.describe_endpoint(EndpointName=self.config["DEPLOYMENT_NAME"])
             return True
-        except self.sm_client.exceptions.ClientError as e:
+        except ClientError as e:
             if "Could not find endpoint" in str(e):
                 return False
             raise
 
-    def cleanup(self):
-        """Clean up existing endpoint resources"""
-        endpoint_name = self.config["DEPLOYMENT_NAME"]
+    def _cleanup_existing(self):
+        """Delete existing endpoint resources"""
         try:
-            # Get endpoint config first
-            endpoint_config = self.sm_client.describe_endpoint(
-                EndpointName=endpoint_name
-            )["EndpointConfigName"]
+            # Get associated resources first
+            endpoint_info = self.sm_client.describe_endpoint(
+                EndpointName=self.config["DEPLOYMENT_NAME"]
+            )
+            config_name = endpoint_info["EndpointConfigName"]
             
-            # Get model name (usually same as endpoint config name)
-            model_name = endpoint_config
+            # Delete in proper order
+            self.sm_client.delete_endpoint(EndpointName=self.config["DEPLOYMENT_NAME"])
+            self.sm_client.delete_endpoint_config(EndpointConfigName=config_name)
             
-            logger.info(f"🧹 Cleaning up existing resources for {endpoint_name}...")
+            # Model may already be deleted by SageMaker
+            try:
+                self.sm_client.delete_model(ModelName=config_name)
+            except ClientError as e:
+                if "Could not find model" not in str(e):
+                    raise
             
-            # Delete endpoint
-            self.sm_client.delete_endpoint(EndpointName=endpoint_name)
-            logger.info(f"🗑️ Deleted endpoint: {endpoint_name}")
-            
-            # Delete endpoint config
-            self.sm_client.delete_endpoint_config(EndpointConfigName=endpoint_config)
-            logger.info(f"🗑️ Deleted endpoint config: {endpoint_config}")
-            
-            # Delete model
-            self.sm_client.delete_model(ModelName=model_name)
-            logger.info(f"🗑️ Deleted model: {model_name}")
-            
+            logger.info("♻️ Existing resources cleaned up")
             return True
         except Exception as e:
             logger.error(f"⚠️ Cleanup failed: {str(e)}")
             return False
 
-    def deploy_model(self):
+    def deploy(self):
         """Handle deployment with replace mode"""
         try:
-            if self._endpoint_exists() and self.config["DEPLOY_MODE"] != "replace":
-                raise ValueError(
-                    f"Endpoint {self.config['DEPLOYMENT_NAME']} exists. "
-                    "Set DEPLOY_MODE='replace' to update it."
-                )
+            # Check existing endpoint if in replace mode
+            if self.config["DEPLOY_MODE"] == "replace" and self._endpoint_exists():
+                if not self._cleanup_existing():
+                    raise RuntimeError("Failed to clean existing endpoint")
+                time.sleep(10)  # Wait for deletions to complete
+
+            # Deployment configuration
+            deploy_config = {
+                "instance_type": self.config["INSTANCE_TYPE"],
+                "image_url": self.config["IMAGE_URI"],
+                "region_name": self.config["REGION"],
+                "mode": self.config["DEPLOY_MODE"],
+                "timeout_seconds": self.config["TIMEOUT"],
+                "synchronous": True,
+                "archive": False
+            }
 
             logger.info(f"🚀 Deploying in {self.config['DEPLOY_MODE']} mode...")
-
-            # Force clean existing resources if in replace mode
-            if self.config["DEPLOY_MODE"] == "replace" and self._endpoint_exists():
-                if not self.cleanup():
-                    raise RuntimeError("Failed to clean up existing endpoint")
-                time.sleep(10)  # Wait for resources to delete
-
+            
+            # Start deployment
             self.deployment_client.create_deployment(
                 name=self.config["DEPLOYMENT_NAME"],
                 model_uri=self.config["MODEL_URI"],
-                config={
-                    "instance_type": self.config["INSTANCE_TYPE"],
-                    "image_url": self.config["IMAGE_URI"],
-                    "region_name": self.config["REGION"],
-                    "timeout_seconds": self.config["TIMEOUT"],
-                    "mode": self.config["DEPLOY_MODE"],
-                    "archive": False,
-                    "synchronous": True
-                }
+                flavor="python_function",
+                config=deploy_config
             )
+            
             logger.info("✅ Deployment successful!")
             return True
 
@@ -104,36 +98,6 @@ class SageMakerDeployer:
             logger.error(f"❌ Deployment failed: {str(e)}")
             return False
 
-    def test_endpoint(self):
-        """Test the deployed endpoint"""
-        if self.config["TEST_DURATION"] <= 0:
-            return
-
-        logger.info(f"🧪 Testing endpoint for {self.config['TEST_DURATION']} seconds...")
-        start_time = time.time()
-        
-        try:
-            runtime = boto3.client('sagemaker-runtime', region_name=self.config["REGION"])
-            
-            while time.time() - start_time < self.config["TEST_DURATION"]:
-                # Add your actual test logic here
-                time.sleep(30)
-                logger.info("Testing endpoint...")
-                
-        except Exception as e:
-            logger.error(f"⚠️ Test error: {str(e)}")
-
-    def run(self):
-        """Execute full workflow"""
-        try:
-            if self.deploy_model():
-                self.test_endpoint()
-                if self.config["ENABLE_CLEANUP"]:
-                    self.cleanup()
-        except Exception as e:
-            logger.error(f"🔥 Workflow failed: {str(e)}")
-            raise
-
 if __name__ == "__main__":
     deployer = SageMakerDeployer(CONFIG)
-    deployer.run()
+    deployer.deploy()
