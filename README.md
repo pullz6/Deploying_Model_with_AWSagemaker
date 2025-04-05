@@ -8,12 +8,9 @@ This project is to understand and provide a template on how to take a model in M
 
 1. [Project Overview]
 2. [Installation]
-4. [Usage]
-5. [Examples]
-6. [Project Structure]
-7. [Contributing]
-8. [License]
-9. [Acknowledgments]
+3. [Usage]
+4. [Project Structure]
+5. [Acknowledgments]
 
 ---
 
@@ -60,7 +57,7 @@ Step 8 - Create sagemaker endpoint
 
 ### Configuration
 
-Please ensure to set up your AWS credentials with AWS configure. 
+Please ensure to set up your AWS credentials with 'AWS configure'. 
 
 
 ## Project Structure
@@ -78,14 +75,7 @@ project-root/
 
 ```
 
-## Contributing
-
-Guidelines for contributing to the project:
-
-- How to submit issues, bug reports, or feature requests.
-- Guidelines for pull requests, including coding standards and testing.
-
 
 ## Acknowledgments
 
-Shout out to resources, libraries, people, or tutorials that helped you build the project.
+Shout out to mlflow, aws sagemaker documentations. 
