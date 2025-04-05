@@ -1,20 +1,20 @@
 # Deploying_Model_with_AWSagemaker
 
-This project is to understand and provide a template on how to take a model in Mlflow to deployment with AWS Sagemaker. 
+This project is to understand and provide a template on how to take a model in Mlflow to deployment with AWS Sagemaker. We will be using a Kinematic Movement Dataset from Kaggle, which is used to predict activite from the phone's sensors. 
 
 ---
 
 ## Table of Contents
 
-1. [Project Overview](https://www.notion.so/readme-md-Template-in-Github-12c81ba51b198002bc79e96f749cafd6?pvs=21)
-2. [Features](https://www.notion.so/readme-md-Template-in-Github-12c81ba51b198002bc79e96f749cafd6?pvs=21)
-3. [Installation](https://www.notion.so/readme-md-Template-in-Github-12c81ba51b198002bc79e96f749cafd6?pvs=21)
-4. [Usage](https://www.notion.so/readme-md-Template-in-Github-12c81ba51b198002bc79e96f749cafd6?pvs=21)
-5. [Examples](https://www.notion.so/readme-md-Template-in-Github-12c81ba51b198002bc79e96f749cafd6?pvs=21)
-6. [Project Structure](https://www.notion.so/readme-md-Template-in-Github-12c81ba51b198002bc79e96f749cafd6?pvs=21)
-7. [Contributing](https://www.notion.so/readme-md-Template-in-Github-12c81ba51b198002bc79e96f749cafd6?pvs=21)
-8. [License](https://www.notion.so/readme-md-Template-in-Github-12c81ba51b198002bc79e96f749cafd6?pvs=21)
-9. [Acknowledgments](https://www.notion.so/readme-md-Template-in-Github-12c81ba51b198002bc79e96f749cafd6?pvs=21)
+1. [Project Overview]
+2. [Features]
+3. [Installation]
+4. [Usage]
+5. [Examples]
+6. [Project Structure]
+7. [Contributing]
+8. [License]
+9. [Acknowledgments]
 
 ---
 
